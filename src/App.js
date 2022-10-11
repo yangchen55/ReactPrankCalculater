@@ -3,12 +3,19 @@ import { useState } from "react";
 import "./App.css";
 import { Display } from "./components/Display";
 import { BtnArea } from "./components/BtnArea";
+import sound from "./assets/aa.wav";
 
 const operators = ["%", "/", "*", "-", "+"];
 
 const App = () => {
   const [strToDisplay, setStrToDisplay] = useState("");
   const [lastOperator, setLastOperator] = useState("");
+  const [isPrank, setIsPrank] = useState(false);
+
+  const randomNumber = () => {
+    const num = Math.round(Math.random() * 10);
+    return num > 8 ? 0 : num;
+  };
 
   const handleOnButtonClick = (val) => {
     console.log(val);
@@ -22,7 +29,10 @@ const App = () => {
         temStr = strToDisplay.slice(0, -1);
       }
 
-      return setStrToDisplay(eval(temStr).toString());
+      const extra = randomNumber();
+      extra && setIsPrank(true);
+      const total = eval(temStr) + extra;
+      return setStrToDisplay(total.toString());
     }
 
     if (val === "C") {
@@ -63,7 +73,7 @@ const App = () => {
       <div className="wrapper">
         <div className="round"></div>
         <div className="calculater">
-          <Display strToDisplay={strToDisplay} />
+          <Display strToDisplay={strToDisplay} isPrank={isPrank} />
           <BtnArea handleOnButtonClick={handleOnButtonClick} />
         </div>
       </div>
